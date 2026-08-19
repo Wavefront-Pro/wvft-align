@@ -5,7 +5,6 @@ image next to a live FFT of the selected pupil so you can see fringe frequency
 and orientation while you adjust the setup.
 
 Works on Windows, macOS, and Linux with ordinary UVC / USB cameras via OpenCV.
-No vendor SDK, no account, no installer.
 
 ## Features
 
@@ -16,7 +15,7 @@ No vendor SDK, no account, no installer.
 
 ## Run
 
-Requires [uv](https://docs.astral.sh/uv/).
+This application **requires `uv`**, please install it [from here](https://docs.astral.sh/uv/getting-started/installation/).
 
 ```bash
 uvx --from git+https://github.com/Wavefront-Pro/wvft-align.git wvft-align
@@ -30,6 +29,13 @@ cd wvft-alignment-utility
 uv run wvft-align
 ```
 
+To run the application from a desktop shortcut on Windows:
+
+1. Right-click an empty space on your desktop, select New > Shortcut.
+2. Paste the following command into the location box:
+    `powershell.exe -ExecutionPolicy Bypass "uvx --from git+https://github.com/Wavefront-Pro/wvft-align.git wvft-align`
+3. Click Next, add a descriptive name and click Finish.
+
 ## Usage
 
 1. Pick a camera.
@@ -38,14 +44,12 @@ uv run wvft-align
 3. Watch the FFT while you tip/tilt / change path length. A well-aligned
    interferogram shows a clean pair of sidebands.
 
-## Dependencies
-
-`numpy`, `opencv-python`, `pillow`. On Windows, `duvc-ctl` is used
-to list camera names; OpenCV enumeration is the fallback everywhere else.
 
 ## Adding a camera backend
 
-Cameras are plugins. Subclass `cameras.base.Camera`, give it a unique
+Cameras are viewed as plugins. To add camera support, please open a pull request with the following:
+
+Subclass `cameras.base.Camera`, give it a unique
 `backend_id`, implement `list_devices` / `open` / `close` / `is_open` / `grab`,
 and decorate the class with `@register`.
 
@@ -69,7 +73,7 @@ class MyCamera(Camera):
 ```
 
 Import the class from `src/wvft_align/cameras/__init__.py` so it registers at startup.
-The built-in OpenCV backend in `src/wvft_align/cameras/opencv.py` is a complete reference.
+The built-in OpenCV backend in `src/wvft_align/cameras/opencv.py` is a complete reference example.
 
 ### Required tests
 
