@@ -145,11 +145,11 @@ class App(tk.Tk):
         page.columnconfigure(1, weight=1)
         page.rowconfigure(0, weight=1)
 
-        self.live = ImageCanvas(page, size=540, title="Camera")
+        self.live = ImageCanvas(page, size=540)
         self.live.grid(row=0, column=0, sticky="nsew", padx=(0, 8))
         self.live.on_circle_drawn = self._on_circle_drawn
 
-        self.fft = ImageCanvas(page, size=540, title="FFT", interactive=False)
+        self.fft = ImageCanvas(page, size=540, interactive=False)
         self.fft.grid(row=0, column=1, sticky="nsew", padx=(8, 0))
 
         bar = ttk.Frame(page)
