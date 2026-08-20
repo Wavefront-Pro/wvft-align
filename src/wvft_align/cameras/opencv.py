@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 import platform
+from pathlib import Path
 
 import cv2
 
@@ -26,8 +27,11 @@ class OpenCVCamera(Camera):
 
     @classmethod
     def list_devices(cls) -> list[CameraDevice]:
-        if platform.system() == "Windows":
+        system = platform.system()
+        if system == "Windows":
             return _list_windows()
+        if system == "Linux":
+            return _list_linux()
         return _list_opencv()
 
     def is_open(self) -> bool:
@@ -87,6 +91,20 @@ def _list_windows() -> list[CameraDevice]:
     except Exception:
         log.exception("duvc-ctl enumeration failed; falling back to OpenCV")
         return _list_opencv()
+
+
+def _list_linux(root: Path = Path("/sys/class/video4linux")) -> list[CameraDevice]:
+    found: list[CameraDevice] = []
+    for device in root.glob("video*"):
+        try:
+            index = int(device.name.removeprefix("video"))
+            if (device / "index").read_text().strip() != "0":
+                continue
+            name = (device / "name").read_text().strip()
+        except (OSError, ValueError):
+            continue
+        found.append(CameraDevice("opencv", index, name))
+    return sorted(found, key=lambda device: device.index)
 
 
 def _list_opencv(max_index: int = 6) -> list[CameraDevice]:

@@ -17,6 +17,21 @@ Works on Windows, macOS, and Linux with ordinary UVC / USB cameras via OpenCV.
 
 This application **requires `uv`**, please install it [from here](https://docs.astral.sh/uv/getting-started/installation/).
 
+On Linux, install Python's Tk support first:
+
+```bash
+# Debian / Ubuntu
+sudo apt install python3-tk
+
+# Fedora
+sudo dnf install python3-tkinter
+
+# Arch Linux
+sudo pacman -S tk
+```
+
+Then run:
+
 ```bash
 uvx --from git+https://github.com/Wavefront-Pro/wvft-align.git wvft-align
 ```
